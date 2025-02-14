@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Valentine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffe6e6;
+            color: #ff6666;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 2em;
+        }
+        .grid {
+            display: grid;
+            gap: 15px;
+            justify-items: center;
+            margin-top: 20px;
+        }
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .grid-5 {
+            grid-template-columns: repeat(5, 1fr);
+        }
+        button {
+            background-color: #ff9999;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #ff6666;
+        }
+        img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .valentine-image {
+            max-width: 300px;
+            height: auto;
+            margin: 10px auto;
+            display: block;
+        }
+        .grid button {
+            padding: 0;
+            overflow: hidden;
+        }
+        .grid button img {
+            margin-bottom: 10px;
+        }
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .submit-btn {
+            margin-top: 20px;
+        }
+        .calendar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .calendar input {
+            font-size: 1.2em;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        let selectedDate = "";
+        let selectedFood = "";
+        let selectedDessert = "";
+        let selectedActivity = "";
+
+        function goToPage(pageNumber) {
+            const pages = document.querySelectorAll('.container');
+            pages.forEach(page => page.style.display = 'none');
+            document.getElementById(`page${pageNumber}`).style.display = 'block';
+        }
+
+        function setSummary(date, food, dessert, activity) {
+            selectedDate = date;
+            selectedFood = food;
+            selectedDessert = dessert;
+            selectedActivity = activity;
+            const summaryText = `Na randkę pójdziemy ${selectedDate}, zjemy ${selectedFood}, na deser ${selectedDessert}, a potem pójdziemy na/do ${selectedActivity}.`;
+            document.getElementById('summary-text').textContent = summaryText;
+        }
+
+        function saveToFile() {
+            const data = `Data randki: ${selectedDate}\nJedzenie: ${selectedFood}\nDeser: ${selectedDessert}\nAktywność: ${selectedActivity}`;
+            const blob = new Blob([data], { type: 'text/plain' });
+            const anchor = document.createElement('a');
+            anchor.href = URL.createObjectURL(blob);
+            anchor.download = 'valentine_plan.txt';
+            anchor.click();
+            URL.revokeObjectURL(anchor.href);
+        }
+    </script>
+</head>
+<body>
+    <div id="page1" class="container">
+        <h1>Czy zostaniesz moją walentynką? 💝</h1>
+        <img class="valentine-image" src="walentynka.jpg" alt="Zdjęcie walentynkowe">
+        <div class="button-row">
+            <button onclick="goToPage(2)">Tak</button>
+            <button onclick="goToPage(7)">Nie</button>
+        </div>
+    </div>
+
+    <div id="page2" class="container" style="display:none;">
+        <h1>Wybierz datę randki</h1>
+        <div class="calendar">
+            <input type="date" min="2025-02-01" max="2025-12-31" onchange="selectedDate = this.value">
+        </div>
+        <button class="submit-btn" onclick="goToPage(3)">Zapisz odpowiedź</button>
+    </div>
+
+    <div id="page3" class="container" style="display:none;">
+        <h1>Co będziemy jeść?</h1>
+        <div class="grid grid-4">
+            <button class="option" onclick="selectedFood='Pizza'; goToPage(4)"><img src="pizza.jpg" alt="Pizza"><span>Pizza</span></button>
+            <button class="option" onclick="selectedFood='Burger'; goToPage(4)"><img src="burger.jpg" alt="Burger"><span>Burger</span></button>
+            <button class="option" onclick="selectedFood='Makaron'; goToPage(4)"><img src="pasta.jpg" alt="Makaron"><span>Makaron</span></button>
+            <button class="option" onclick="selectedFood='Schabowy'; goToPage(4)"><img src="schabowy.jpg" alt="Schabowy"><span>Schabowy</span></button>
+            <button class="option" onclick="selectedFood='Pierogi'; goToPage(4)"><img src="pierogi.jpg" alt="Pierogi"><span>Pierogi</span></button>
+            <button class="option" onclick="selectedFood='Kebab'; goToPage(4)"><img src="kebab.jpg" alt="Kebab"><span>Kebab</span></button>
+            <button class="option" onclick="selectedFood='Naleśniki'; goToPage(4)"><img src="nalesniki.jpg" alt="Naleśniki"><span>Naleśniki</span></button>
+            <button class="option" onclick="selectedFood='McDonald\'s'; goToPage(4)"><img src="mcdonald.jpg" alt="McDonald's"><span>McDonald's</span></button>
+        </div>
+    </div>
+
+    <div id="page4" class="container" style="display:none;">
+        <h1>Jaki deser zjemy?</h1>
+        <div class="grid grid-5">
+            <button class="option" onclick="selectedDessert='Lody'; goToPage(5)"><img src="icecream.jpg" alt="Lody"><span>Lody</span></button>
+            <button class="option" onclick="selectedDessert='Szarlotka'; goToPage(5)"><img src="applepie.jpg" alt="Szarlotka"><span>Szarlotka</span></button>
+            <button class="option" onclick="selectedDessert='Gofry'; goToPage(5)"><img src="waffles.jpg" alt="Gofry"><span>Gofry</span></button>
+            <button class="option" onclick="selectedDessert='Pączki'; goToPage(5)"><img src="donut.jpg" alt="Pączki"><span>Pączki</span></button>
+            <button class="option" onclick="selectedDessert='Żelki'; goToPage(5)"><img src="jelly.jpg" alt="Żelki"><span>Żelki</span></button>
+        </div>
+    </div>
+
+    <div id="page5" class="container" style="display:none;">
+        <h1>Gdzie pójdziemy później?</h1>
+        <div class="grid grid-5">
+            <button class="option" onclick="selectedActivity='Kino'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="cinema.jpg" alt="Kino"><span>Kino</span></button>
+            <button class="option" onclick="selectedActivity='Teatr'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="theater.jpg" alt="Teatr"><span>Teatr</span></button>
+            <button class="option" onclick="selectedActivity='Kręgle'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="bowling.jpg" alt="Kręgle"><span>Kręgle</span></button>
+            <button class="option" onclick="selectedActivity='Bilard'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="billiard.jpg" alt="Bilard"><span>Bilard</span></button>
+            <button class="option" onclick="selectedActivity='Lodowisko'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="ice_rink.jpg" alt="Lodowisko"><span>Lodowisko</span></button>
+            <button class="option" onclick="selectedActivity='Minigolf'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="minigolf.jpg" alt="Minigolf"><span>Minigolf</span></button>
+            <button class="option" onclick="selectedActivity='Ścianka wspinaczkowa'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="climbing.jpg" alt="Ścianka wspinaczkowa"><span>Ścianka wspinaczkowa</span></button>
+            <button class="option" onclick="selectedActivity='Strefa wysokich lotów'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="trampoline.jpg" alt="Strefa wysokich lotów"><span>Strefa wysokich lotów</span></button>
+            <button class="option" onclick="selectedActivity='Basen'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="pool.jpg" alt="Basen"><span>Basen</span></button>
+            <button class="option" onclick="selectedActivity='Masaż'; goToPage(6); setSummary(selectedDate, selectedFood, selectedDessert, selectedActivity)"><img src="massage.jpg" alt="Masaż"><span>Masaż</span></button>
+        </div>
+    </div>
+
+    <div id="page6" class="container" style="display:none;">
+        <h1>Dziękuję za bycie moją walentynką! 💖
+	    Kocham Cię! </h1>
+        <p id="summary-text"></p>
+        <button onclick="saveToFile()">Zapisz plan randki</button>
+    </div>
+
+    <div id="page7" class="container" style="display:none;">
+        <h1>Nie jesteś śmieszny</h1>
+        <img class="valentine-image" src="notfunny.gif" alt="Zdjęcie rozczarowania">
+        <div class="button-row">
+            <button onclick="goToPage(2)">Oczywiście, że chcę, to tylko moje głupie żarty</button>
+        </div>
+    </div>
+</body>
+</html>
